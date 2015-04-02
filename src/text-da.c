@@ -68,9 +68,16 @@ void get_hour_string_da(int hour, int minute, char *hourBuffer, size_t length)
 {
     memset(hourBuffer, 0, length);
 
+#ifdef FUZZY
+    // calculate hour based on fuzzy minutes
+    // (otherwise we get e.g. "5 minutter i halv elleve"
+    //  when its 11:24 and should say "... i halv tolv")
+    minute = (((minute + 2) / 5) * 5) % 60;
+#endif
+
     if (minute >= 25)
         hour++;
-        
+
     strcat(hourBuffer, NUMBERS[hour % 12]);
 }
 
